@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>RAINYDAY.EXE</title>
+
+<style>
+body{
+    margin:0;
+    overflow:hidden;
+    background:black;
+    color:#00ff00;
+    font-family:Consolas, monospace;
+}
+
+#terminal{
+    padding:15px;
+    white-space:pre-wrap;
+    font-size:18px;
+    height:100vh;
+    overflow:hidden;
+}
+
+.popup{
+    position:fixed;
+    width:280px;
+    background:#111;
+    border:2px solid #00ff00;
+    color:#00ff00;
+    padding:10px;
+    box-shadow:0 0 15px #00ff00;
+    z-index:9999;
+}
+</style>
+</head>
+<body>
+
+<div id="terminal"></div>
+
+<script>
+const term = document.getElementById("terminal");
+
+const startupLines = [
+    "[RAINYDAY.EXE INITIALIZING]",
+    "",
+    "Connecting...",
+    "Connection established.",
+    "Authenticating...",
+    "Authentication successful.",
+    "",
+    "Loading modules...",
+    "Loading network interface...",
+    "Loading memory scanner...",
+    "Loading kernel monitor...",
+    "",
+    "System scan started...",
+    "",
+    "Analyzing processes...",
+    "Analyzing storage...",
+    "Analyzing network...",
+    "",
+    "Status: ACTIVE",
+    ""
+];
+
+let lineIndex = 0;
+
+function randomHex(len){
+    const chars = "0123456789ABCDEF";
+    let out = "";
+    for(let i=0;i<len;i++){
+        out += chars[Math.floor(Math.random()*chars.length)];
+    }
+    return out;
+}
+
+function createPopup(){
+
+    const names = [
+        "RAINYDAYZ.EXE",
+        "RAINYSCAN.EXE",
+        "RD_KERNEL.EXE",
+        "RD_MONITOR.EXE",
+        "RAINDLL32.EXE"
+    ];
+
+    const messages = [
+        "Process initialized",
+        "Background task started",
+        "System monitor active",
+        "Memory scan complete",
+        "Thread duplicated",
+        "Network listener online",
+        "Kernel response received",
+        "Integrity check complete",
+        "Session tracking enabled"
+    ];
+
+    const popup = document.createElement("div");
+    popup.className = "popup";
+
+    popup.style.left =
+        Math.random() * (window.innerWidth - 320) + "px";
+
+    popup.style.top =
+        Math.random() * (window.innerHeight - 180) + "px";
+
+    popup.innerHTML =
+        "<b>" +
+        names[Math.floor(Math.random()*names.length)] +
+        "</b><br><br>" +
+        messages[Math.floor(Math.random()*messages.length)];
+
+    document.body.appendChild(popup);
+
+    setTimeout(() => {
+        popup.remove();
+    }, 5000);
+}
+
+function startSpam(){
+
+    setInterval(() => {
+
+        term.innerHTML +=
+            "ID-" + randomHex(8) +
+            " STATUS=" + randomHex(4) +
+            " MEM=" + Math.floor(Math.random()*100) +
+            "%\n";
+
+        term.scrollTop = term.scrollHeight;
+
+    }, 50);
+
+    setInterval(createPopup, 500);
+}
+
+function typeStartup(){
+
+    if(lineIndex < startupLines.length){
+
+        term.innerHTML += startupLines[lineIndex] + "\n";
+
+        lineIndex++;
+
+        setTimeout(typeStartup, 250);
+
+    } else {
+
+        startSpam();
+
+    }
+}
+
+typeStartup();
+</script>
+
+</body>
+</html>
